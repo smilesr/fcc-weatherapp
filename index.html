@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <style>
+      body {
+        background-color: black;
+        color: white;
+      }
+      .jumbotron {
+        background-color: black;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div class = "container">
+      <div class = "jumbotron">
+        <h1>Free Code Camp </br> Weather App </h1>
+      </div>
+        <div id = "data">
+          <h4></h4>
+        </div>
+        <div id="displayTemp"><span id="temperature"></span><span id="convert"></span></div>
+        <div id = "weather_description"></div>
+        <div id = "weather_icon"> </div>  
+      </div>
+    </div>
+    <script>
+    $(function() {
+      function getWeather (lat, lon){
+        $.ajax({
+          url: "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&APPID=911cdd8b96572d7265c229daef6bb0fe",
+          success: function(data) {
+            // var parsedData = JSON.parse(data);
+            var parsedData = data;
+            var description = parsedData["weather"][0]["description"];
+            var descriptionElement = "<p> " + description + " </p>";
+            var icon = parsedData["weather"][0]["icon"];
+            var imageUrl = "http://openweathermap.org/img/w/" + icon + ".png";
+            var imgElement = "<img src= " + "\'" + imageUrl + "\'" + " " + "alt= " + "\'" + "weather icon" + "\'" + ">";
+            var farenheit = Math.round((parsedData.main.temp - 273.15) * 1.8 + 32);          
+            $("#temperature").html(farenheit);
+            $("#convert").html("&#8457");
+            $("#weather_description").html(description);
+            $("#weather_icon").html(imgElement);
+        }});
+      };
+      $("#convert").click(function(){
+        var currentTemp = Number($("#temperature").html());
+        var currentTempType = $("#convert").text();
+        var newTempType = '';
+        var newTemp = 0;
+        if (currentTempType.charCodeAt(0) === 8457) {
+          newTemp = Math.round((currentTemp - 32)/ 1.8);
+          newTempType = "&#8451";
+        } else if (currentTempType.charCodeAt(0) === 8451) {
+          newTemp = Math.round((currentTemp * 1.8) + 32);
+          newTempType = "&#8457";
+        }
+        $("#temperature").html(newTemp);
+        $("#convert").html(newTempType);
+      });
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position){
+          var lat = position.coords.latitude;
+          var lon = position.coords.longitude;
+          $("#data").html('latitude ' + lat + '<br>' + 'longitude ' + lon);
+          getWeather(lat, lon);
+        });
+      }
+    });
+    </script>
+
+  </body>
+</html>    
