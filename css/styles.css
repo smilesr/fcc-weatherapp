@@ -1,0 +1,21 @@
+body {
+  background-color: black;
+  color: white;
+}
+.jumbotron .h1, .jumbotron h1 {
+  font-size: 50px;
+}
+.jumbotron {
+  background-color: black;
+  margin-bottom: 0px;
+}
+.centerIt {
+  text-align: center;
+  font-size: 18px;
+}
+#convert {
+  color: blue;
+}
+#data, #displayTemp, #weather_description {
+  line-height: 2;
+}

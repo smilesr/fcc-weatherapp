@@ -5,44 +5,38 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/weather-icons.min.css">
+    <link rel="stylesheet" href="css/styles.css">
     <style>
-      body {
-        background-color: black;
-        color: white;
-      }
-      .jumbotron {
-        background-color: black;
-      }
+      
     </style>
 
   </head>
   <body>
     <div class = "container">
-      <div class = "jumbotron">
-        <h1>Free Code Camp </br> Weather App </h1>
+      <div class = "jumbotron centerIt">
+        <h1>Free C<i class="wi wi-hail"></i>de Camp </br> Weather App </h1>
       </div>
-        <div id = "data">
-          <h4></h4>
-        </div>
-        <div id="displayTemp"><span id="temperature"></span><span id="convert"></span></div>
-        <div id = "weather_description"></div>
-        <div id = "weather_icon"> </div>  
+        <div class = "centerIt" id = "data"></div>
+        <div class = "centerIt" id="displayTemp"><span id="temperature"></span><span id="convert"></span></div>
+        <div class = "centerIt" id = "weather_description"></div>
+        <div class = "centerIt" id = "weather_icon"> </div>  
       </div>
     </div>
     <script>
     $(function() {
       function getWeather (lat, lon){
         $.ajax({
-          url: "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&APPID=911cdd8b96572d7265c229daef6bb0fe",
+          url: "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&cnt=10" + "&APPID=911cdd8b96572d7265c229daef6bb0fe",
           success: function(data) {
             // var parsedData = JSON.parse(data);
-            var parsedData = data;
-            var description = parsedData["weather"][0]["description"];
+            var description = data["weather"][0]["description"];
             var descriptionElement = "<p> " + description + " </p>";
-            var icon = parsedData["weather"][0]["icon"];
+            var icon = data["weather"][0]["icon"];
             var imageUrl = "http://openweathermap.org/img/w/" + icon + ".png";
             var imgElement = "<img src= " + "\'" + imageUrl + "\'" + " " + "alt= " + "\'" + "weather icon" + "\'" + ">";
-            var farenheit = Math.round((parsedData.main.temp - 273.15) * 1.8 + 32);          
+            var farenheit = Math.round((data.main.temp - 273.15) * 1.8 + 32)+1;
+            $("#data").html(data.name + " Weather Station");    
             $("#temperature").html(farenheit);
             $("#convert").html("&#8457");
             $("#weather_description").html(description);
@@ -69,7 +63,7 @@
         navigator.geolocation.getCurrentPosition(function(position){
           var lat = position.coords.latitude;
           var lon = position.coords.longitude;
-          $("#data").html('latitude ' + lat + '<br>' + 'longitude ' + lon);
+ 
           getWeather(lat, lon);
         });
       }
