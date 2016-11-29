@@ -8,4 +8,5 @@ LANGUAGES/TOOLS:
 - jQuery
 - AJAX
 - JSON
+- OpenWeatherMap api
 - Navigator.geolocation
